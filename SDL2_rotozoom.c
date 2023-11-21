@@ -35,6 +35,7 @@ Andreas Schiffler -- aschiffler at ferzkopp dot net
 #include <string.h>
 
 #include "SDL2_rotozoom.h"
+#include "SDL2_gfx_helper.h"
 
 /* ---- Internally used structures */
 
@@ -83,7 +84,7 @@ to a situation where the program can segfault.
 Uint32 _colorkey(SDL_Surface *src)
 {
 	Uint32 key = 0; 
-	SDL_GetColorKey(src, &key);
+    SDL_GetSurfaceColorKey(src, &key);
 	return key;
 }
 
@@ -1287,7 +1288,7 @@ SDL_Surface *rotozoomSurfaceXY(SDL_Surface * src, double angle, double zoomx, do
 	* Cleanup temp surface 
 	*/
 	if (src_converted) {
-		SDL_FreeSurface(rz_src);
+        SDL_DestroySurface(rz_src);
 	}
 
 	/*
@@ -1436,7 +1437,7 @@ SDL_Surface *zoomSurface(SDL_Surface * src, double zoomx, double zoomy, int smoo
 		* Cleanup temp surface 
 		*/
 		if (src_converted) {
-			SDL_FreeSurface(rz_src);
+			SDL_DestroySurface(rz_src);
 		}		
 		return NULL;
 	}
@@ -1483,7 +1484,7 @@ SDL_Surface *zoomSurface(SDL_Surface * src, double zoomx, double zoomy, int smoo
 	* Cleanup temp surface 
 	*/
 	if (src_converted) {
-		SDL_FreeSurface(rz_src);
+		SDL_DestroySurface(rz_src);
 	}
 
 	/*
@@ -1644,14 +1645,14 @@ exitShrinkSurface:
 		* Cleanup temp surface 
 		*/
 		if (src_converted==1) {
-			SDL_FreeSurface(rz_src);
+			SDL_DestroySurface(rz_src);
 		}
 	}
 
 	/* Check error state; maybe need to cleanup destination */
 	if (haveError==1) {
 		if (rz_dst!=NULL) {
-			SDL_FreeSurface(rz_dst);
+			SDL_DestroySurface(rz_dst);
 		}
 		rz_dst=NULL;
 	} 
